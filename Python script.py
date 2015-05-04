@@ -3,17 +3,10 @@ Created on 2/05/2015
 
 @author: jeevananthamganesan
 '''
+import sys
 import pandas as pd
 from collections import defaultdict
 from xml.etree import ElementTree
-
-twbFileName = "Your workbook here"
-
-
-with open(twbFileName, 'rt') as f:
-    tree = ElementTree.parse(f)
-                
-mydf = {}
 
 
 def worksheetname(worksheet,x):
@@ -71,26 +64,34 @@ def worksheetname(worksheet,x):
                 if j.attrib.get('kind') != None:
                     d[x]['Kind'] = j.attrib.get('kind')
                 d[x]['Function used'] = k.attrib.get('function')
-                d[x]['Expression'] = (str(k.attrib.get('end'))).upper(),'' + k.attrib.get('count'), 'records'               
+                d[x]['Expression'] = (str(k.attrib.get('end'))).upper(),'' + k.attrib.get('count'), 'records'
             else:
                 d[x]['Worksheet name'] = worksheet.attrib.get('name')
                 d[x]['Filter on field'] = j.attrib.get('column')
                 d[x]['Function used'] = k.attrib.get('function')
                 if j.attrib.get('kind') != None:
                     d[x]['Kind'] = j.attrib.get('kind')
-                d[x]['Details'] = k.tag,k.attrib             
+                d[x]['Details'] = k.tag,k.attrib
     y = y + 1
     return d
-       
-for i in tree.findall('./worksheets'):
-    x = 0
-    for worksheet in i:
-        out = worksheetname(worksheet,x)
-        x = x + 1
-        mydf.update(out)
-    #mydf = pd.concat([mydf.apply(lambda worksheet: worksheetname(worksheet)) for worksheet in i])
-mydfv1 = data = pd.DataFrame(mydf)
-mydfv2 = mydfv1.T
 
-mydfv2.to_csv("your csv location")
-        
+def treegeneration(twbFileName):
+    with open(twbFileName, 'rt') as f:
+        tree = ElementTree.parse(f)
+    mydf = {}
+    for i in tree.findall('./worksheets'):
+        x = 0
+        for worksheet in i:
+            out = worksheetname(worksheet,x)
+            x = x + 1
+            mydf.update(out)
+    mydfv1 = pd.DataFrame(mydf)
+    mydfv2 = mydfv1.T
+    return mydfv2
+
+
+if __name__ == '__main__':
+    twbFileName = sys.argv[1]
+    outputcsv = sys.argv[2]
+    mydfv2 = treegeneration(twbFileName)
+    mydfv2.to_csv(outputcsv)
