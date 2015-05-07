@@ -11,7 +11,6 @@ from xml.etree import ElementTree
 
 def worksheetname(worksheet,x):
     d = defaultdict(dict)
-    y = 0
     for j in worksheet.iter('filter'):
         for k in j.findall('groupfilter'):
             if k.attrib.get('function') == 'filter':
@@ -72,8 +71,8 @@ def worksheetname(worksheet,x):
                 if j.attrib.get('kind') != None:
                     d[x]['Kind'] = j.attrib.get('kind')
                 d[x]['Details'] = k.tag,k.attrib
-    y = y + 1
-    return d
+            x = x + 1
+    return (d,x)
 
 def treegeneration(twbFileName):
     with open(twbFileName, 'rt') as f:
@@ -82,7 +81,7 @@ def treegeneration(twbFileName):
     for i in tree.findall('./worksheets'):
         x = 0
         for worksheet in i:
-            out = worksheetname(worksheet,x)
+            out,x = worksheetname(worksheet,x)
             x = x + 1
             mydf.update(out)
     mydfv1 = pd.DataFrame(mydf)
