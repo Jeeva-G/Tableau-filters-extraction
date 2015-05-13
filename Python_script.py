@@ -1,5 +1,5 @@
 '''
-Created on 8/05/2015
+Created on 14/05/2015
 
 @author: jeevananthamganesan
 '''
@@ -36,8 +36,17 @@ def worksheetname(worksheet,x):
                     d[x]['Function used'] = k.attrib.get('{http://www.tableausoftware.com/xml/user}ui-enumeration')
                 else:
                     d[x]['Function used'] = k.attrib.get('function')
-                #d[x]['Values used'] = [eachelem.attrib.get('member') for eachelem in k if eachelem.attrib.get('member') != None]
-                d[x]['Values used'] = [eachelem.attrib.get('member') if eachelem.attrib.get('member') != None else ('Range From = ' + eachelem.attrib.get('from'), ' to ' + eachelem.attrib.get('to')) if eachelem.attrib.get('function') == 'range' else 'Something new in union' for eachelem in k ]
+                d[x]['Values used'] = []
+                for eachelem in k.iter('groupfilter'):
+                    if eachelem.attrib.get('function') == 'range':
+                        d[x]['Values used'] = ['Range From = ' + eachelem.attrib.get('from')+ ' to ' + eachelem.attrib.get('to')] + d[x]['Values used']
+                    elif eachelem.attrib.get('function') != 'level-members':
+                        if eachelem.attrib.get('member') != None:
+                            d[x]['Values used'] = [eachelem.attrib.get('member')] + d[x]['Values used']
+                    elif eachelem.attrib.get('function') == 'level-members':
+                        pass
+                    else:
+                        d[x]['Values used'] = d[x]['Values used'] + ['Something new in union'] 
             elif k.attrib.get('function') == 'except':
                 d[x]['Worksheet name'] = worksheet.attrib.get('name')
                 d[x]['Filter on field'] = j.attrib.get('column')
@@ -47,8 +56,17 @@ def worksheetname(worksheet,x):
                     d[x]['Function used'] = k.attrib.get('function')
                 if j.attrib.get('kind') != None:
                     d[x]['Kind'] = j.attrib.get('kind')
-                #d[x]['Values used'] = [eachelem.attrib.get('member') for eachelem in k.iter('groupfilter') if eachelem.attrib.get('member') != None]
-                d[x]['Values used'] = [eachelem.attrib.get('member') if eachelem.attrib.get('member') != None else ('Range From = ' + eachelem.attrib.get('from'), ' to ' + eachelem.attrib.get('to')) if eachelem.attrib.get('function') == 'range' else 'Something new in except' for eachelem in k ]
+                d[x]['Values used'] = []
+                for eachelem in k.iter('groupfilter'):
+                    if eachelem.attrib.get('function') == 'range':
+                        d[x]['Values used'] = ['Range From = ' + eachelem.attrib.get('from')+ ' to ' + eachelem.attrib.get('to')] + d[x]['Values used']
+                    elif eachelem.attrib.get('function') != 'level-members':
+                        if eachelem.attrib.get('member') != None:
+                            d[x]['Values used'] = [eachelem.attrib.get('member')] + d[x]['Values used']
+                    elif eachelem.attrib.get('function') == 'level-members':
+                        pass
+                    else:
+                        d[x]['Values used'] = d[x]['Values used'] + ['Something new in except'] 
             elif k.attrib.get('function') == 'range':
                 d[x]['Worksheet name'] = worksheet.attrib.get('name')
                 d[x]['Filter on field'] = j.attrib.get('column')
@@ -104,8 +122,17 @@ def sharedfilters(sharedviews,x):
                     d[x]['Function used'] = k.attrib.get('{http://www.tableausoftware.com/xml/user}ui-enumeration')
                 else:
                     d[x]['Function used'] = k.attrib.get('function')
-                #d[x]['Values used'] = [eachelem.attrib.get('member') for eachelem in k if eachelem.attrib.get('member') != None]
-                d[x]['Values used'] = [eachelem.attrib.get('member') if eachelem.attrib.get('member') != None else ('Range From = ' + eachelem.attrib.get('from'), ' to ' + eachelem.attrib.get('to')) if eachelem.attrib.get('function') == 'range' else 'Something new in union' for eachelem in k ]
+                d[x]['Values used'] = []
+                for eachelem in k.iter('groupfilter'):
+                    if eachelem.attrib.get('function') == 'range':
+                        d[x]['Values used'] = ['Range From = ' + eachelem.attrib.get('from')+ ' to ' + eachelem.attrib.get('to')] + d[x]['Values used']
+                    elif eachelem.attrib.get('function') != 'level-members':
+                        if eachelem.attrib.get('member') != None:
+                            d[x]['Values used'] = [eachelem.attrib.get('member')] + d[x]['Values used']
+                    elif eachelem.attrib.get('function') == 'level-members':
+                        pass
+                    else:
+                        d[x]['Values used'] = d[x]['Values used'] + ['Something new in union'] 
             elif k.attrib.get('function') == 'except':
                 d[x]['Worksheet name'] = "All worksheet"
                 d[x]['Filter on field'] = j.attrib.get('column')
@@ -115,8 +142,17 @@ def sharedfilters(sharedviews,x):
                     d[x]['Function used'] = k.attrib.get('function')
                 if j.attrib.get('kind') != None:
                     d[x]['Kind'] = j.attrib.get('kind')
-                #d[x]['Values used'] = [eachelem.attrib.get('member') for eachelem in k.iter('groupfilter') if eachelem.attrib.get('member') != None]
-                d[x]['Values used'] = [eachelem.attrib.get('member') if eachelem.attrib.get('member') != None else ('Range From = ' + eachelem.attrib.get('from'), ' to ' + eachelem.attrib.get('to')) if eachelem.attrib.get('function') == 'range' else 'Something new in except' for eachelem in k ]
+                d[x]['Values used'] = []
+                for eachelem in k.iter('groupfilter'):
+                    if eachelem.attrib.get('function') == 'range':
+                        d[x]['Values used'] = ['Range From = ' + eachelem.attrib.get('from')+ ' to ' + eachelem.attrib.get('to')] + d[x]['Values used']
+                    elif eachelem.attrib.get('function') != 'level-members':
+                        if eachelem.attrib.get('member') != None:
+                            d[x]['Values used'] = [eachelem.attrib.get('member')] + d[x]['Values used']
+                    elif eachelem.attrib.get('function') == 'level-members':
+                        pass
+                    else:
+                        d[x]['Values used'] = d[x]['Values used'] + ['Something new in except'] 
             elif k.attrib.get('function') == 'range':
                 d[x]['Worksheet name'] = "All worksheet"
                 d[x]['Filter on field'] = j.attrib.get('column')
