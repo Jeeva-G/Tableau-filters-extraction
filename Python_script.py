@@ -201,6 +201,8 @@ def treegeneration(twbFileName):
     mydf.update(mydf1)
     mydfv1 = pd.DataFrame(mydf)
     mydfv2 = mydfv1.T
+    columns = ['Worksheet name','Filter on field','Function Used','Kind','Values Used']
+    mydfv2 = mydfv2[columns] 
     return mydfv2
 
 
@@ -208,4 +210,4 @@ if __name__ == '__main__':
     twbFileName = sys.argv[1]
     outputcsv = sys.argv[2]
     mydfv2 = treegeneration(twbFileName)
-    mydfv2.to_csv(outputcsv)
+    mydfv2.to_csv(outputcsv,index=False)
