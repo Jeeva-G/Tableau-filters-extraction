@@ -4,6 +4,7 @@ Created on 14/05/2015
 @author: jeevananthamganesan
 '''
 import sys
+import re
 import pandas as pd
 from collections import defaultdict
 from xml.etree import ElementTree
@@ -210,4 +211,5 @@ if __name__ == '__main__':
     twbFileName = sys.argv[1]
     outputcsv = sys.argv[2]
     mydfv2 = treegeneration(twbFileName)
+    mydfv2['Filter on field'].replace(to_replace= [r"\[.*?\].",r"none:",r":nk",r":"], value="",inplace = True, regex=True)
     mydfv2.to_csv(outputcsv,index=False)
